@@ -1,25 +1,40 @@
-# assets-commerce
+# Edge Delivery Services with AEM Authoring Boilerplate for Commerce , Version 0.6
 
-This project contains the AEM Commerce boilerplate artifacts. It demonstrates the usage of [Product SKU metadata field](https://github.com/amalhotr_adobe/assets-commerce/tree/main/ui.apps/src/main/content/jcr_root/apps/commerce/ui/components/productdata) for Adobe Experience Manager (AEM). It is intended as a best-practice set of examples as well as a potential starting point to develop your own functionality.
+This project boilerplate is for AEM Authoring with Edge Delivery Services (aka Crosswalk) projects that integrate with Adobe Commerce.
 
-General overview of an AEM project for cloud services is available [here](https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/developing/aem-project-content-package-structure).
+## Documentation
 
-⚠️Replace all occurrences of `techinsiderscitisignalaemaccs `in the `filter.xml` and all the `pom.xml` files within the project with your app name. 
+Before using the boilerplate, we recommend you to go through the documentation on <https://experienceleague.adobe.com/developer/commerce/storefront/> and more specifically:
 
-## Modules
+1. [Storefront Developer Tutorial](https://experienceleague.adobe.com/developer/commerce/storefront/get-started/)
+1. [AEM Docs](https://www.aem.live/docs/)
+1. [AEM Developer Tutorial](https://www.aem.live/developer/ue-tutorial)
+1. [The Anatomy of an AEM Project](https://www.aem.live/developer/anatomy-of-a-project)
+1. [Web Performance](https://www.aem.live/developer/keeping-it-100)
+1. [Markup, Sections, Blocks, and Auto Blocking](https://www.aem.live/developer/markup-sections-blocks)
+1. [Product Page Prerendering](https://github.com/adobe-rnd/aem-commerce-prerender)
 
-The main parts of the template are:
+## Getting Started
 
-* **ui.apps**: contains the product data metadata field, a corresponding metadataschema formbuilder component, and overlay of a few ootb formbuilder components. Also contains a RepositoryInitializer config to register a new namespace
-* **ui.content**: contains sample 'default' metadata form with a commerce tab
-![commerce tab in metadata](files/metadata-tab.png "Commerce Tab")
+Alternatively, you can follow our [Guide](https://experienceleague.adobe.com/developer/commerce/storefront/get-started/) for a more detailed walkthrough.
 
-## How to build
+## Updating Drop-in dependencies
+You may need to update one of the drop-in components, or `@adobe/magento-storefront-event-collector` or `@adobe/magento-storefront-events-sdk` to a new version. Besides checking the release notes for any breaking changes, ensure you also execute the `postinstall` script so that the dependenices in your `scripts/__dropins__` directory are updated to the latest build. This should be run immediately after you update the component, for example:
 
-To build all the modules, run in the project root directory the following command with Maven 3:
+```bash
+npm install @dropins/storefront-cart@2.0. # Updates the storefront-cart dependency in node_modules/
+npm run postinstall # Copies scripts from node_modules into scripts/__dropins__
+```
 
-    mvn clean install
+This is a custom script which copies files out of `node_modules` and into a local directory which EDS can serve. You must manually run `postinstall` due to a design choice in `npm` which does not execute `postinstall` after you install a _specific_ package.
 
-This will build only the artefacts for an AEM as a Cloud Service target. To install the content pkg onto local aem cloud service sdk
+## Changelog
 
-    mvn clean install content-package:install
+Major changes are described and documented as part of pull requests and tracked via the `changelog` tag. To keep your project up to date, please follow this list:
+
+<https://github.com/hlxsites/aem-boilerplate-commerce/issues?q=label%3Achangelog+is%3Aclosed>
+
+### Product Detail Pages (PDPs)
+Since Ocotober 2025, folder mapping is no longer configured by default as its [deprecated](https://www.aem.live/developer/folder-mapping). To keep it easy to start, static product pages have been created as part ot the site template for all products listed on the homepage. 
+
+It is highly recommended to create physical product detail pages in Edge Delivery Services. Use the [AEM Commerce Prerenderer](https://github.com/adobe-rnd/aem-commerce-prerender) to implement a [byom overaly](https://www.aem.live/developer/byom#setup-byom-as-content-overlay) that creates and publishes product detail pages from the product data available in Catalog Service.
